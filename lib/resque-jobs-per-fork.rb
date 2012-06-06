@@ -7,15 +7,15 @@ module Resque
   # the `before_perform_jobs_per_fork` hook will run in the child perform
   # right before the child perform starts
   #
-  # Call with a block to set the hook.
-  # Call with no arguments to return the hook.
+  # Call with a block to register a hook.
+  # Call with no arguments to return all registered hooks.
   def self.before_perform_jobs_per_fork(&block)
-    block ? (@before_perform_jobs_per_fork = block) : @before_perform_jobs_per_fork
+    block ? register_hook(:before_perform_jobs_per_fork, block) : hooks(:before_perform_jobs_per_fork)
   end
 
-  # Set the before_perform_jobs_per_fork proc.
-  def self.before_perform_jobs_per_fork=(before_perform_jobs_per_fork)
-    @before_perform_jobs_per_fork = before_perform_jobs_per_fork
+  # Register a before_perform_jobs_per_fork proc.
+  def self.before_perform_jobs_per_fork=(block)
+    register_hook(:before_perform_jobs_per_fork, block)
   end
 
   # the `after_perform_jobs_per_fork` hook will run in the child perform
@@ -24,12 +24,12 @@ module Resque
   # Call with a block to set the hook.
   # Call with no arguments to return the hook.
   def self.after_perform_jobs_per_fork(&block)
-    block ? (@after_perform_jobs_per_fork = block) : @after_perform_jobs_per_fork
+    block ? register_hook(:after_perform_jobs_per_fork, block) : hooks(:after_perform_jobs_per_fork)
   end
 
   # Set the after_perform_jobs_per_fork proc.
-  def self.after_perform_jobs_per_fork=(after_perform_jobs_per_fork)
-    @after_perform_jobs_per_fork = after_perform_jobs_per_fork
+  def self.after_perform_jobs_per_fork=(block)
+    register_hook(:after_perform_jobs_per_fork, block)
   end
 
   class Worker
